@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "RefugeMap",
+    "tagline": "Aid services near you"
+  },
+  "categories": {
+    "all": "All",
+    "housing": "Housing",
+    "health": "Health",
+    "food": "Food",
+    "hygiene": "Hygiene",
+    "language": "French classes",
+    "legal": "Legal",
+    "material": "Supplies"
+  },
+  "map": {
+    "searchPlaceholder": "Search for a service…",
+    "servicesNearby": "{count} services nearby",
+    "viewList": "View list",
+    "myLocation": "My location",
+    "geolocationDenied": "Location denied. Enter a city.",
+    "cityFallback": "Services around Paris"
+  },
+  "list": {
+    "title": "Nearby services",
+    "empty": "No results",
+    "emptyDetail": "No services of this type nearby.",
+    "showAll": "Show all services"
+  },
+  "detail": {
+    "back": "Back",
+    "open": "Open · closes at {time}",
+    "closed": "Closed",
+    "address": "Address",
+    "fromYou": "from your location",
+    "hours": "Opening hours",
+    "phone": "Phone",
+    "languagesSpoken": "Languages spoken on site",
+    "description": "About",
+    "call": "Call",
+    "directions": "Directions",
+    "share": "Share",
+    "lastUpdated": "Updated {date}",
+    "warning": "Hours may change without notice. Call before visiting."
+  },
+  "language": {
+    "title": "Choose language",
+    "subtitle": "Choose your language · اختر لغتك"
+  },
+  "offline": {
+    "title": "No connection",
+    "detail": "Check your internet or WiFi connection and try again.",
+    "savedCount": "{count} services saved",
+    "savedDetail": "Available offline",
+    "retry": "Try again",
+    "retrying": "Connecting…",
+    "viewSaved": "View saved data"
+  },
+  "nav": {
+    "map": "Map",
+    "list": "List"
+  }
+}

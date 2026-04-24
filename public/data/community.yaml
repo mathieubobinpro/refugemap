@@ -1,0 +1,37 @@
+# RefugeMap — Services ajoutés manuellement par la communauté
+#
+# Format :
+#   - id:          identifiant unique (optionnel, généré sinon)
+#     name:        Nom du service
+#     category:    housing | health | food | hygiene | language | legal | material
+#     lat:         latitude (décimal)
+#     lng:         longitude (décimal)
+#     address:     adresse complète
+#     city:        ville
+#     postalCode:  code postal (optionnel)
+#     phone:       téléphone (optionnel)
+#     website:     site web (optionnel)
+#     languages:   [fr, ar, en, ...] (optionnel)
+#     hours:       (optionnel)
+#       - day: Lun–Ven
+#         time: 9h00–17h00
+#     description: texte libre (optionnel)
+#
+# Pour contribuer : ouvrez une Pull Request avec votre entrée ajoutée ici.
+# Les services sont vérifiés avant fusion.
+
+services:
+  - id: community-example-001
+    name: "Exemple — Centre d'accueil (à remplacer)"
+    category: housing
+    lat: 48.8566
+    lng: 2.3522
+    address: "1 rue de la Paix"
+    city: "Paris"
+    postalCode: "75001"
+    phone: "+33 1 00 00 00 00"
+    languages: [fr, ar, en]
+    hours:
+      - day: Lun–Ven
+        time: "9h00 – 17h00"
+    description: "Ceci est un exemple. Remplacez-le par un vrai service."

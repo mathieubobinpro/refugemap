@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "RefugeMap",
+    "tagline": "خدمات المساعدة بالقرب منك"
+  },
+  "categories": {
+    "all": "الكل",
+    "housing": "إيواء",
+    "health": "صحة",
+    "food": "طعام",
+    "hygiene": "نظافة",
+    "language": "اللغة الفرنسية",
+    "legal": "قانون",
+    "material": "مواد"
+  },
+  "map": {
+    "searchPlaceholder": "ابحث عن خدمة...",
+    "servicesNearby": "{count} خدمة قريبة",
+    "viewList": "قائمة",
+    "myLocation": "موقعي",
+    "geolocationDenied": "تم رفض الموقع. أدخل مدينة.",
+    "cityFallback": "خدمات حول باريس"
+  },
+  "list": {
+    "title": "الخدمات القريبة",
+    "empty": "لا توجد نتائج",
+    "emptyDetail": "لا توجد خدمات في هذه الفئة قريبًا.",
+    "showAll": "إظهار الكل"
+  },
+  "detail": {
+    "back": "رجوع",
+    "open": "مفتوح · يغلق الساعة {time}",
+    "closed": "مغلق",
+    "address": "العنوان",
+    "fromYou": "من موقعك",
+    "hours": "أوقات العمل",
+    "phone": "الهاتف",
+    "languagesSpoken": "اللغات المتاحة",
+    "description": "وصف",
+    "call": "اتصال",
+    "directions": "الطريق",
+    "share": "مشاركة",
+    "lastUpdated": "تحديث {date}",
+    "warning": "قد تتغير أوقات العمل. تحقق قبل الذهاب."
+  },
+  "language": {
+    "title": "اختر اللغة",
+    "subtitle": "Choose your language · اختر لغتك"
+  },
+  "offline": {
+    "title": "لا يوجد اتصال",
+    "detail": "تحقق من اتصالك بالإنترنت أو WiFi وحاول مجددًا.",
+    "savedCount": "{count} خدمات محفوظة",
+    "savedDetail": "يمكنك عرضها بدون اتصال",
+    "retry": "إعادة المحاولة",
+    "retrying": "جارٍ الاتصال...",
+    "viewSaved": "عرض المحفوظات"
+  },
+  "nav": {
+    "map": "الخريطة",
+    "list": "قائمة"
+  }
+}

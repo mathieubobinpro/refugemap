@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* ── Design tokens — "Institutional Warmth" ───────────────── */
+:root {
+  --color-bg:             oklch(97.5% 0.012 80);
+  --color-surface:        oklch(100% 0 0);
+  --color-primary:        oklch(30% 0.08 245);
+  --color-primary-light:  oklch(94% 0.04 245);
+  --color-accent:         oklch(65% 0.14 75);
+  --color-accent-bg:      oklch(97% 0.04 75);
+  --color-accent-border:  oklch(88% 0.08 75);
+  --color-accent-text:    oklch(40% 0.10 75);
+  --color-text:           oklch(17% 0.04 245);
+  --color-text-secondary: oklch(48% 0.04 245);
+  --color-border:         oklch(88% 0.02 245);
+  --color-open:           oklch(42% 0.13 155);
+  --color-closed:         oklch(50% 0.14 25);
+
+  --cat-hebergement: oklch(48% 0.13 245);
+  --cat-sante:       oklch(46% 0.13 175);
+  --cat-alimentation:oklch(46% 0.13 145);
+  --cat-hygiene:     oklch(50% 0.13 215);
+  --cat-langue:      oklch(46% 0.13 295);
+  --cat-juridique:   oklch(44% 0.13 265);
+  --cat-materiel:    oklch(52% 0.13 55);
+
+  --font-primary: 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-arabic:  'Noto Sans Arabic', 'Noto Sans', sans-serif;
+
+  --shadow-sm: 0 1px 4px rgba(26,34,53,0.08);
+  --shadow-md: 0 4px 16px rgba(26,34,53,0.12);
+  --shadow-lg: 0 8px 32px rgba(26,34,53,0.16);
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 999px;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:             oklch(17% 0.03 245);
+  --color-surface:        oklch(22% 0.03 245);
+  --color-primary:        oklch(70% 0.08 245);
+  --color-primary-light:  oklch(28% 0.06 245);
+  --color-accent:         oklch(72% 0.14 75);
+  --color-accent-bg:      oklch(24% 0.04 75);
+  --color-accent-border:  oklch(36% 0.07 75);
+  --color-accent-text:    oklch(80% 0.10 75);
+  --color-text:           oklch(94% 0.01 75);
+  --color-text-secondary: oklch(62% 0.03 245);
+  --color-border:         oklch(32% 0.03 245);
+  --color-open:           oklch(62% 0.13 155);
+  --color-closed:         oklch(62% 0.13 25);
+
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.25);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.35);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.45);
+}
+
+/* ── Global resets ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #__next {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+}
+
+[dir="rtl"] { font-family: var(--font-arabic); }
+
+/* Hide scrollbars (mobile UX) */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+.maplibregl-map { font-family: var(--font-primary) !important; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}

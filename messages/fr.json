@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "RefugeMap",
+    "tagline": "Services d'aide près de vous"
+  },
+  "categories": {
+    "all": "Tout",
+    "housing": "Hébergement",
+    "health": "Santé",
+    "food": "Alimentation",
+    "hygiene": "Hygiène",
+    "language": "Français",
+    "legal": "Juridique",
+    "material": "Matériel"
+  },
+  "map": {
+    "searchPlaceholder": "Rechercher un service…",
+    "servicesNearby": "{count} services à proximité",
+    "viewList": "Voir la liste",
+    "myLocation": "Ma position",
+    "geolocationDenied": "Localisation refusée. Entrez une ville.",
+    "cityFallback": "Services autour de Paris"
+  },
+  "list": {
+    "title": "Services à proximité",
+    "empty": "Aucun résultat",
+    "emptyDetail": "Aucun service de cette catégorie à proximité.",
+    "showAll": "Voir tous les services"
+  },
+  "detail": {
+    "back": "Retour",
+    "open": "Ouvert · ferme à {time}",
+    "closed": "Fermé",
+    "address": "Adresse",
+    "fromYou": "de votre position",
+    "hours": "Horaires",
+    "phone": "Téléphone",
+    "languagesSpoken": "Langues parlées sur place",
+    "description": "Description",
+    "call": "Appeler",
+    "directions": "Itinéraire",
+    "share": "Partager",
+    "lastUpdated": "Mis à jour le {date}",
+    "warning": "Les horaires peuvent changer sans préavis. Appelez avant de vous déplacer."
+  },
+  "language": {
+    "title": "Choisir la langue",
+    "subtitle": "Choose your language · اختر لغتك"
+  },
+  "offline": {
+    "title": "Pas de connexion",
+    "detail": "Vérifiez votre connexion internet ou WiFi, puis réessayez.",
+    "savedCount": "{count} services sauvegardés",
+    "savedDetail": "Consultables hors ligne",
+    "retry": "Réessayer",
+    "retrying": "Connexion en cours…",
+    "viewSaved": "Voir les données sauvegardées"
+  },
+  "nav": {
+    "map": "Carte",
+    "list": "Liste"
+  }
+}
