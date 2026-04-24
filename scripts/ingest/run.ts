@@ -3,64 +3,58 @@
  * Daily ingestion script — run via GitHub Actions or manually:
  *   npx tsx scripts/ingest/run.ts
  *
- * Requires DATABASE_URL env var.
+ * Requires NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY env vars.
  */
 import 'dotenv/config'
-import { sql } from 'drizzle-orm'
-import { db } from '../../lib/db/client'
+import { createClient } from '@supabase/supabase-js'
 import { fetchOsmServices } from '../../lib/connectors/osm'
 import { loadCommunityServices } from '../../lib/connectors/community'
-import { toDbService } from '../../lib/normalizers'
+import type { RawService } from '../../lib/normalizers'
 
-async function upsertService(raw: ReturnType<typeof toDbService>) {
-  await db.execute(sql`
-    INSERT INTO services (
-      id, external_id, source, name, category, subcategory,
-      location, address, city, postal_code,
-      phone, email, website, hours, conditions, languages,
-      description, source_url, last_updated
-    ) VALUES (
-      gen_random_uuid(),
-      ${raw.externalId},
-      ${raw.source},
-      ${raw.name},
-      ${raw.category},
-      ${raw.subcategory ?? null},
-      ST_GeomFromText(${`POINT(${(raw.location as string).replace('SRID=4326;POINT(', '').replace(')', '')}`}, 4326),
-      ${raw.address},
-      ${raw.city},
-      ${raw.postalCode ?? null},
-      ${raw.phone ?? null},
-      ${raw.email ?? null},
-      ${raw.website ?? null},
-      ${raw.hours ? JSON.stringify(raw.hours) : null}::jsonb,
-      ${raw.conditions ?? null},
-      ${raw.languages ?? null},
-      ${raw.description ?? null},
-      ${raw.sourceUrl ?? null},
-      NOW()
-    )
-    ON CONFLICT (source, external_id)
-    DO UPDATE SET
-      name         = EXCLUDED.name,
-      category     = EXCLUDED.category,
-      location     = EXCLUDED.location,
-      address      = EXCLUDED.address,
-      city         = EXCLUDED.city,
-      phone        = EXCLUDED.phone,
-      website      = EXCLUDED.website,
-      hours        = EXCLUDED.hours,
-      description  = EXCLUDED.description,
-      last_updated = NOW()
-  `)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  { auth: { persistSession: false } }
+)
+
+async function upsertService(raw: RawService) {
+  const { error } = await supabase.rpc('upsert_service', {
+    p_external_id: raw.externalId,
+    p_source:      raw.source,
+    p_name:        raw.name,
+    p_category:    raw.category,
+    p_subcategory: raw.subcategory ?? null,
+    p_lat:         raw.lat,
+    p_lng:         raw.lng,
+    p_address:     raw.address,
+    p_city:        raw.city,
+    p_postal_code: raw.postalCode ?? null,
+    p_phone:       raw.phone ?? null,
+    p_email:       raw.email ?? null,
+    p_website:     raw.website ?? null,
+    p_hours:       raw.hours ? JSON.stringify(raw.hours) : null,
+    p_conditions:  raw.conditions ?? null,
+    p_languages:   raw.languages ?? null,
+    p_description: raw.description ?? null,
+    p_source_url:  raw.sourceUrl ?? null,
+  })
+  if (error) throw error
 }
 
 async function main() {
   console.log('🔄 RefugeMap ingestion started', new Date().toISOString())
 
+  // Vérification de la connexion
+  const { error: pingError } = await supabase.from('services').select('id').limit(1)
+  if (pingError) {
+    console.error('✗ Impossible de se connecter à Supabase :', pingError.message)
+    process.exit(1)
+  }
+  console.log('✅ Connexion Supabase OK')
+
   const connectors = [
-    { name: 'OSM', fetch: () => fetchOsmServices() },
-    { name: 'Community', fetch: async () => loadCommunityServices() },
+    { name: 'OSM (France)',  fetch: () => fetchOsmServices() },
+    { name: 'Community',     fetch: async () => loadCommunityServices() },
   ]
 
   for (const connector of connectors) {
@@ -72,16 +66,16 @@ async function main() {
       let ok = 0, err = 0
       for (const raw of raws) {
         try {
-          await upsertService(toDbService(raw))
+          await upsertService(raw)
           ok++
-        } catch (e) {
+        } catch (e: any) {
           err++
-          if (err <= 3) console.error('  ✗ upsert error:', e)
+          if (err <= 3) console.error('  ✗', e?.message ?? e)
         }
       }
       console.log(`  ✓ ${ok} upserted, ${err} errors`)
-    } catch (e) {
-      console.error(`✗ ${connector.name} failed:`, e)
+    } catch (e: any) {
+      console.error(`✗ ${connector.name} failed:`, e?.message ?? e)
     }
   }
 
