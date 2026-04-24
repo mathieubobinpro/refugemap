@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import type { Map as MapLibreMap, Marker } from 'maplibre-gl'
 import type { ServiceDTO, GeoPosition } from '@/lib/types'
 import { CATEGORY_CONFIG } from '@/lib/categories'
@@ -17,7 +17,7 @@ export function MapView({ services, position, positionGranted, activeServiceId, 
   const mapRef = useRef<MapLibreMap | null>(null)
   const markersRef = useRef<Map<string, Marker>>(new Map())
   const userMarkerRef = useRef<Marker | null>(null)
-  const initializedRef = useRef(false)
+  const [mapReady, setMapReady] = useState(false)
 
   // Init map once (avec position par défaut)
   useEffect(() => {
@@ -32,14 +32,14 @@ export function MapView({ services, position, positionGranted, activeServiceId, 
         attributionControl: false,
       })
       mapRef.current = map
-      initializedRef.current = true
+      map.once('load', () => setMapReady(true))
       map.addControl(new NavigationControl({ showCompass: false }), 'bottom-right')
     })
 
     return () => {
       mapRef.current?.remove()
       mapRef.current = null
-      initializedRef.current = false
+      setMapReady(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -47,39 +47,29 @@ export function MapView({ services, position, positionGranted, activeServiceId, 
   // Recentrer la carte + déplacer le marker utilisateur quand la position change
   useEffect(() => {
     const map = mapRef.current
-    if (!map) return
+    if (!map || !mapReady) return
 
-    const move = () => {
-      // Recentrer la carte sur la nouvelle position
-      map.flyTo({ center: [position.lng, position.lat], zoom: 14, duration: 1200 })
+    map.flyTo({ center: [position.lng, position.lat], zoom: 14, duration: 1200 })
 
-      // Créer ou déplacer le marker de position utilisateur
-      import('maplibre-gl').then(({ Marker }) => {
-        if (userMarkerRef.current) {
-          userMarkerRef.current.setLngLat([position.lng, position.lat])
-        } else {
-          const el = document.createElement('div')
-          el.style.cssText = `
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background: var(--color-primary, #2B3D5C);
-            border: 3px solid #fff;
-            box-shadow: 0 0 0 8px rgba(43,61,92,0.18);
-            pointer-events: none;
-          `
-          userMarkerRef.current = new Marker({ element: el, anchor: 'center' })
-            .setLngLat([position.lng, position.lat])
-            .addTo(map)
-        }
-      })
-    }
-
-    if (map.loaded()) {
-      move()
-    } else {
-      map.once('load', move)
-    }
-  }, [position])
+    import('maplibre-gl').then(({ Marker }) => {
+      if (userMarkerRef.current) {
+        userMarkerRef.current.setLngLat([position.lng, position.lat])
+      } else {
+        const el = document.createElement('div')
+        el.style.cssText = `
+          width: 20px; height: 20px;
+          border-radius: 50%;
+          background: var(--color-primary, #2B3D5C);
+          border: 3px solid #fff;
+          box-shadow: 0 0 0 8px rgba(43,61,92,0.18);
+          pointer-events: none;
+        `
+        userMarkerRef.current = new Marker({ element: el, anchor: 'center' })
+          .setLngLat([position.lng, position.lat])
+          .addTo(map)
+      }
+    })
+  }, [position, mapReady])
 
   // Mise à jour des markers de services
   const updateMarkers = useCallback(() => {
