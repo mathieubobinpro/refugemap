@@ -21,21 +21,33 @@ interface Props {
 export function MapScreen({ locale, onOpenLanguage }: Props) {
   const t = useTranslations('map')
   const router = useRouter()
-  const { position, setPosition, activeCategory, setActiveCategory, cacheServices } = useAppStore()
+  const { position, positionGranted, setPosition, activeCategory, setActiveCategory, cacheServices } = useAppStore()
   const [services, setServices] = useState<ServiceDTO[]>([])
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null)
+  const [geoReady, setGeoReady] = useState(false)
 
-  // Geolocation on mount
+  // Géolocalisation au montage — on attend la réponse avant le premier fetch
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation) {
+      setGeoReady(true)
+      return
+    }
     navigator.geolocation.getCurrentPosition(
-      (pos) => setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }, true),
-      () => setPosition(DEFAULT_POSITION, false)
+      (pos) => {
+        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }, true)
+        setGeoReady(true)
+      },
+      () => {
+        setPosition(DEFAULT_POSITION, false)
+        setGeoReady(true)
+      },
+      { timeout: 8000, maximumAge: 60000 }
     )
   }, [setPosition])
 
-  // Fetch services
+  // Fetch services — seulement après que la géoloc soit résolue
   useEffect(() => {
+    if (!geoReady) return
     const params = new URLSearchParams({
       lat: String(position.lat),
       lng: String(position.lng),
@@ -50,7 +62,7 @@ export function MapScreen({ locale, onOpenLanguage }: Props) {
         cacheServices(data)
       })
       .catch(() => {})
-  }, [position, activeCategory, cacheServices])
+  }, [geoReady, position, activeCategory, cacheServices])
 
   const filtered = activeCategory ? services.filter((s) => s.category === activeCategory) : services
   const activeService = activeServiceId ? services.find((s) => s.id === activeServiceId) : null
@@ -110,6 +122,7 @@ export function MapScreen({ locale, onOpenLanguage }: Props) {
         <MapView
           services={filtered}
           position={position}
+          positionGranted={positionGranted}
           activeServiceId={activeServiceId}
           onSelectService={setActiveServiceId}
         />

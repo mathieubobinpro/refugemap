@@ -15,6 +15,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-rtl-text": "^0.4.0",
     "@supabase/supabase-js": "^2.104.1",
+    "@swc/helpers": "^0.5.21",
     "drizzle-orm": "^0.45.2",
     "js-yaml": "^4.1.1",
     "lucide-react": "^1.9.0",
