@@ -58,18 +58,6 @@ async function upsertService(raw: ReturnType<typeof toDbService>) {
 async function main() {
   console.log('🔄 RefugeMap ingestion started', new Date().toISOString())
 
-  // Make external_id unique per source
-  await db.execute(sql`
-    DO $$ BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint WHERE conname = 'services_source_external_id_unique'
-      ) THEN
-        ALTER TABLE services ADD CONSTRAINT services_source_external_id_unique
-          UNIQUE (source, external_id);
-      END IF;
-    END $$;
-  `).catch(() => {})
-
   const connectors = [
     { name: 'OSM', fetch: () => fetchOsmServices() },
     { name: 'Community', fetch: async () => loadCommunityServices() },
